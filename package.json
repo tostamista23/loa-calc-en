@@ -1,6 +1,7 @@
 {
   "name": "loa-calc",
   "version": "0.0.0",
+  "homepage": "https://tostamista23.github.io/loa-calc-en/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
