@@ -4,7 +4,7 @@ import {
   data,
   GameState,
   Sage,
-} from '../../../../.yalc/@mokoko/elixir/dist';
+} from 'src/app/core/elixir';
 import { councilConverter } from './index-converter';
 
 function createIndexTable() {

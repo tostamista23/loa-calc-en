@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GameState } from '@mokoko/elixir';
+import { GameState } from 'src/app/core/elixir';
 import { createEvaluator, Evaluator } from './functions/evaluate';
 
 @Injectable({

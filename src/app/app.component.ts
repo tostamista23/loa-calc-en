@@ -21,23 +21,7 @@ export class AppComponent implements OnInit {
   ) {
     angulartics2GoogleAnalytics.startTracking();
 
-    router.events
-      .pipe(
-        filter(
-          (event: Event): event is NavigationEnd =>
-            event instanceof NavigationEnd
-        )
-      )
-      .pipe(
-        map((e) => e.urlAfterRedirects),
-        startWith(''),
-        pairwise()
-      )
-      .subscribe(([fromUrl, toUrl]) => {
-        if (fromUrl !== toUrl) {
-          resetScrollPosition();
-        }
-      });
+    router.navigate(['/elixir']);
   }
 
   ngOnInit() {

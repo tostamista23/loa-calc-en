@@ -1,10 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 import {
   EffectOption,
   GameState,
   SageType,
-} from '../../../../.yalc/@mokoko/elixir';
+} from 'src/app/core/elixir'
 import { CouncilDialogComponent } from './council-dialog.component';
 
 @Component({
@@ -27,14 +29,14 @@ export class ElixirSageComponent {
   }>();
   @Output() setExhausted = new EventEmitter<boolean>();
 
-  constructor(private dialog: MatDialog) {}
+  constructor(protected _sanitizer: DomSanitizer, private dialog: MatDialog) {}
 
   get sage() {
     return this.gameState.sages[this.index];
   }
 
-  get description() {
-    return GameState.query.getCouncilDescription(this.gameState, this.index);
+  get description(): SafeHtml {
+    return this._sanitizer.bypassSecurityTrustHtml(GameState.query.getCouncilDescription(this.gameState, this.index));
   }
 
   get curveScore() {

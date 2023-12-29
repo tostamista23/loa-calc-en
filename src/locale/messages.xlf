@@ -2,6 +2,13 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="ko" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="8972347351366034443" datatype="html">
+        <source>엘릭서 연습 (베타)</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8978931479759346965" datatype="html">
         <source>주의사항</source>
         <context-group purpose="location">
@@ -118,7 +125,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2148489888981604536" datatype="html">
@@ -129,7 +136,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">26,29</context>
+          <context context-type="linenumber">25,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1601682587522736863" datatype="html">
@@ -140,21 +147,21 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">30,33</context>
+          <context context-type="linenumber">29,32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7700246210441425373" datatype="html">
         <source>소진</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="45521661622806337" datatype="html">
         <source>엘릭서 도우미 (베타)</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2080549445220571508" datatype="html">
@@ -164,39 +171,18 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4191451795534516046" datatype="html">
-        <source> 남은 연성 <x id="INTERPOLATION" equiv-text="{{ gameState.turnLeft }}"/>회 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;decreaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>remove<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;increaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>add<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
+      <trans-unit id="7306115838485168157" datatype="html">
+        <source> 남은 연성 회 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">8,15</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7676097550713026853" datatype="html">
-        <source> 가장 높은 조언점수가 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ baselineScore * 10000 | number : &quot;.2&quot; }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> 이하일시 리롤 추천 </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">17,21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6654642694180587564" datatype="html">
-        <source> 봉인 페이즈에서 질서3 조언이 기회 소모 없음이 아닐시 리롤 추천 </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">22,24</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5828944030473837995" datatype="html">
-        <source> 봉인 페이즈에서 질서3을 향하는 조언이 목표 옵션을 봉인할 시 리롤 추천 </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">25,28</context>
+          <context context-type="linenumber">9,11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3831630743150038690" datatype="html">
         <source> 초기화 </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">32,34</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
     </body>

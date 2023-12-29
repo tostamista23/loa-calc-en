@@ -1,7 +1,7 @@
-import { Council, data, GameState } from '../../../../.yalc/@mokoko/elixir';
+import { Council, data, GameState } from 'src/app/core/elixir';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { getKoreanRegex } from 'ko-fuzzy';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-council-dialog',
@@ -29,11 +29,11 @@ import { getKoreanRegex } from 'ko-fuzzy';
 export class CouncilDialogComponent implements OnInit {
   councils = data.councils;
   dataSource: {
-    description: string;
+    description: any;
     council: Council;
   }[] = [];
   filteredDataSource: {
-    description: string;
+    description: any;
     council: Council;
   }[] = [];
 
@@ -44,17 +44,18 @@ export class CouncilDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<CouncilDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public dialogData: { gameState: GameState; index: number }
+    public dialogData: { gameState: GameState; index: number },
+    protected _sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
     this.dataSource = data.councils.map((council) => ({
       council,
-      description: GameState.query.getCouncilDescriptionFromId(
+      description: this._sanitizer.bypassSecurityTrustHtml(GameState.query.getCouncilDescriptionFromId(
         this.dialogData.gameState,
         council.id,
         this.dialogData.index
-      ),
+      )),
     }));
     this.filteredDataSource = [...this.dataSource];
   }
@@ -67,10 +68,7 @@ export class CouncilDialogComponent implements OnInit {
     this.filterText = str;
     this.filteredDataSource = this.dataSource.filter((data) => {
       if (this.filterText === '') return true;
-      return getKoreanRegex(this.filterText, {
-        consonantMatch: true,
-        fuzzy: true,
-      }).test(data.description);
+      return data.description.toLocaleLowerCase().includes(str);
     });
   }
 

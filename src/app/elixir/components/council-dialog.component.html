@@ -17,7 +17,7 @@
       [class.selected]="data.council.id === selected?.id"
       *ngFor="let data of filteredDataSource"
     >
-      {{ data.description }}
+      <span [innerHTML]="data.description"></span>
     </div>
   </div>
 </div>

@@ -31,3 +31,15 @@
     color: white;
   }
 }
+
+.effect-value-square:nth-child(even) {
+  border-right:0 !important;
+}
+
+.effect-value-square:nth-child(odd) {
+  border-right:0 !important;
+}
+
+.effect-value-square:last-child {
+  border-right: 1px solid black !important;
+}

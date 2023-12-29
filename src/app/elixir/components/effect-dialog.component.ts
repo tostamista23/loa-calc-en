@@ -5,7 +5,7 @@ import {
   data,
   EffectOption,
   GameState,
-} from '../../../../.yalc/@mokoko/elixir';
+} from 'src/app/core/elixir';
 
 @Component({
   selector: 'app-effect-dialog',

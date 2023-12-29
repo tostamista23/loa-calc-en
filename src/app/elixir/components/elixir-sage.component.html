@@ -5,7 +5,7 @@
   <div class="power-container">
     <div
       *ngFor="let i of [1, 2, 3]"
-      class="lawful-power"
+      class="lawful-power diamond"
       [ngClass]="{ 'is-filled': (sage.type === 'lawful' && sage.power) >= i }"
       (click)="setTypePower('lawful', i)"
     ></div>
@@ -18,8 +18,7 @@
       (click)="setTypePower('chaos', i)"
     ></div>
   </div>
-  <div class="description-container" (click)="launchCouncilDialog(index)">
-    {{ description }}
+  <div class="description-container" (click)="launchCouncilDialog(index)" [innerHTML]="description">
   </div>
   <div>
     <div i18n>스택점수 {{ curveScore * 1000 | number : ".2-2" }}</div>

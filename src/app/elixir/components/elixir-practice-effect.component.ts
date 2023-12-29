@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { api, data, GameState } from '../../../../.yalc/@mokoko/elixir';
+import { api, data, GameState } from 'src/app/core/elixir';
 
 @Component({
   selector: 'app-elixir-practice-effect',

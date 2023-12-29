@@ -8,7 +8,7 @@ import {
   GameState,
   Sage,
   SageType,
-} from '../../../../.yalc/@mokoko/elixir';
+} from 'src/app/core/elixir';
 import { DisclaimerDialogComponent } from '../../core/components/disclaimer-dialog.component';
 import { EvaluatorService } from '../evaluator.service';
 

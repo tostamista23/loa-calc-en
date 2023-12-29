@@ -1,4 +1,4 @@
-import { Council, data } from '../../../../.yalc/@mokoko/elixir';
+import { Council, data } from 'src/app/core/elixir';
 
 const indexedTable = data.councils.reduce((acc, council) => {
   const key = JSON.stringify(council.logics);

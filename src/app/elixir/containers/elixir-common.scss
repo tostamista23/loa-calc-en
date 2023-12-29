@@ -23,9 +23,14 @@
 }
 
 .enchant-area {
-  flex: 1 1 auto;
+  flex: 0 1 360px;
 }
 
 .is-focused {
   box-shadow: 0 0 0 2px #000;
 }
+
+.content-center {
+  justify-content: center !important;
+}
+

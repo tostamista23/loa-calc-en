@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { EffectOption, GameState } from '../../../../.yalc/@mokoko/elixir';
+import { EffectOption, GameState } from 'src/app/core/elixir';
 
 @Component({
   selector: 'app-elixir-practice-sage',

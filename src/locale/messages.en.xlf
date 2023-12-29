@@ -2,6 +2,14 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="ko" datatype="plaintext" original="ng2.template">
     <body>
+      <trans-unit id="8972347351366034443" datatype="html">
+        <source>엘릭서 연습 (베타)</source>
+        <target>Elixir Assistant (Beta)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/app.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8978931479759346965" datatype="html">
         <source>조언</source>
         <target>Caution</target>
@@ -51,7 +59,7 @@
       </trans-unit>
       <trans-unit id="7987198871427441911" datatype="html">
         <source>조언</source>
-        <target>Reminder</target>
+        <target>Effect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/council-dialog.component.html</context>
           <context context-type="linenumber">5</context>
@@ -130,7 +138,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">25</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2148489888981604536" datatype="html">
@@ -142,7 +150,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">26,29</context>
+          <context context-type="linenumber">25,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1601682587522736863" datatype="html">
@@ -154,7 +162,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">30,33</context>
+          <context context-type="linenumber">29,32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7700246210441425373" datatype="html">
@@ -162,7 +170,7 @@
         <target>Exhaust</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/components/elixir-sage.component.html</context>
-          <context context-type="linenumber">43</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="45521661622806337" datatype="html">
@@ -181,20 +189,12 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4191451795534516046" datatype="html">
-        <source> 남은 연성 <x id="INTERPOLATION" equiv-text="{{ gameState.turnLeft }}"/>회 <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;decreaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>remove<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;increaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>add<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></source>
-        <target> <x id="INTERPOLATION" equiv-text="{{ gameState.turnLeft }}"/> transmute(s) left <x id="START_TAG_BUTTON" ctype="x-button" equiv-text="&lt;button (click)=&quot;decreaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>remove<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/><x id="START_TAG_BUTTON_1" ctype="x-button_1" equiv-text="&lt;button (click)=&quot;increaseTurnLeft()&quot; mat-icon-button&gt;"/><x id="START_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;mat-icon&gt;"/>add<x id="CLOSE_TAG_MAT_ICON" ctype="x-mat_icon" equiv-text="&lt;/mat-icon&gt;"/><x id="CLOSE_TAG_BUTTON" ctype="x-button" equiv-text="&lt;/button&gt;"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">8,15</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7676097550713026853" datatype="html">
         <source> 가장 높은 조언점수가 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ baselineScore * 10000 | number : &quot;.2&quot; }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> 이하일시 리롤 추천 </source>
         <target> Reroll recommended when the highest advice score is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ baselineScore * 10000 | number : &quot;.2&quot; }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> or less  </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">17,21</context>
+          <context context-type="linenumber">9,13</context>
         </context-group>
       </trans-unit>~
       <trans-unit id="6654642694180587564" datatype="html">
@@ -202,7 +202,7 @@
         <target> In the sealing phase, if the order 3 advice is not that there is no opportunity consumption, a reroll is recommended. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">22,24</context>
+          <context context-type="linenumber">14,16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5828944030473837995" datatype="html">
@@ -210,7 +210,15 @@
         <target> In the sealing phase, advice toward order 3 recommends a reroll when sealing the target option. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">25,28</context>
+          <context context-type="linenumber">17,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7306115838485168157" datatype="html">
+        <source> 남은 연성 회 </source>
+        <target> Transmutes remaining </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
+          <context context-type="linenumber">26,28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3831630743150038690" datatype="html">
@@ -218,7 +226,7 @@
         <target> Reset </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/elixir/containers/elixir.component.html</context>
-          <context context-type="linenumber">32,34</context>
+          <context context-type="linenumber">21,23</context>
         </context-group>
       </trans-unit>
     </body>
