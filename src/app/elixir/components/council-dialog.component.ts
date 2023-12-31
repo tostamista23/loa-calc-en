@@ -68,7 +68,7 @@ export class CouncilDialogComponent implements OnInit {
     this.filterText = str;
     this.filteredDataSource = this.dataSource.filter((data) => {
       if (this.filterText === '') return true;
-      return data.description.toLocaleLowerCase().includes(str);
+      return data.description?.changingThisBreaksApplicationSecurity?.toLocaleLowerCase().includes(str);
     });
   }
 

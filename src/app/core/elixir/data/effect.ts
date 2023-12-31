@@ -60,14 +60,14 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Weapon Attack Power",
+    name: "Weapon Power",
     optionDescriptions: [
-      "Weapon Attack Power",
-      "Weapon Attack Power +236",
-      "Weapon Attack Power +488",
-      "Weapon Attack Power +740",
-      "Weapon Attack Power +1110",
-      "Weapon Attack Power +1480",
+      "Weapon Power",
+      "Weapon Power +236",
+      "Weapon Power +488",
+      "Weapon Power +740",
+      "Weapon Power +1110",
+      "Weapon Power +1480",
     ],
   },
   {
