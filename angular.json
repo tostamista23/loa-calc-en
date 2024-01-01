@@ -45,7 +45,6 @@
               "src/styles.scss"
             ],
             "scripts": [],
-            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {

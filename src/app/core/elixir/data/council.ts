@@ -3017,7 +3017,7 @@ export const councils: readonly Council[] = [
     descriptions: [
       "I will increase the level of the effect <you choose> by [<-2> to <+2>].",
       "I will raise the level of the effect <of your choice> by one of [<-2> to <+2>].",
-      "I will increase the level of the effect <you chose> by [<-2> to <+2>]."
+      "Modify effect <of your choice> by [<-2> to <+2>]."
     ],
     slotType: 3,
     type: "common",

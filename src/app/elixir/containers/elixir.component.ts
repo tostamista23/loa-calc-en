@@ -10,7 +10,10 @@ import {
   SageType,
 } from 'src/app/core/elixir';
 import { DisclaimerDialogComponent } from '../../core/components/disclaimer-dialog.component';
-import { EvaluatorService } from '../evaluator.service';
+import { EvaluatorService } from '../services/evaluator.service';
+import { DetectionService } from '../services/detection.service';
+import { type } from 'os';
+import { Box } from '../models/box.model';
 
 @Component({
   selector: 'app-elixir',
@@ -37,7 +40,8 @@ export class ElixirComponent implements OnInit {
     @Inject(LOCALE_ID) public locale: string,
     private titleService: Title,
     private dialog: MatDialog,
-    private evaluator: EvaluatorService
+    private evaluator: EvaluatorService,
+    private detectionService: DetectionService
   ) {
     this.titleService.setTitle(locale == "en-US" ? "Elixir Simulation - Lost Ark Optimization Calculator": 'LoaCalc : 엘릭서 시뮬레이션 - 로스트아크 최적화 계산기');
   }
@@ -127,6 +131,32 @@ export class ElixirComponent implements OnInit {
     this.curveScores = scores.curveScores;
     this.adviceScores = scores.adviceScores;
     this.totalScores = scores.totalScores;
+  }
+
+  onFileSelected(event: any): void {
+      let list: {id: string,sage: number, desc: string}[] = []
+      data.councils.forEach(obj => { 
+        obj.descriptions.map(c => {
+
+          [0,1,2].forEach(x => {
+            list.push({id:obj.id,sage: x, desc: GameState.query.getCouncilDescriptionFromId(this.gameState, obj.id, x, false).replaceAll("<", "").replaceAll(">","")});
+          })
+        });
+      });
+
+      this.detectionService.start(URL.createObjectURL(event.target.files[0])).subscribe(() => {
+
+        this.detectionService.game.sages.forEach((box:Box, index: number) => {
+          let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
+        
+          if (!result){
+            console.warn(box.text.replace(/\s+$/, ''));
+            return;
+          }
+
+          this.setCouncil(index, result.id);
+        });
+      })
   }
 
   onFocusTarget(index: number) {

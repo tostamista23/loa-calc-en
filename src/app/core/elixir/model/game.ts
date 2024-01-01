@@ -308,7 +308,8 @@ function isTurnInRange(state: GameState, [min, max]: [number, number]) {
 function getCouncilDescriptionFromId(
   state: GameState,
   id: string,
-  sageIndex: number
+  sageIndex: number,
+  highlight: boolean = true,
 ) {
   const council = Council.query.getOne(id);
   if (!council) {
@@ -316,12 +317,14 @@ function getCouncilDescriptionFromId(
   }
   const effectNames = state.effects.map((eff) => eff.optionName);
 
-  return highlightHTML(council.descriptions[sageIndex]
-    .replaceAll("{0}", effectNames[0])
-    .replaceAll("{1}", effectNames[1])
-    .replaceAll("{2}", effectNames[2])
-    .replaceAll("{3}", effectNames[3])
-    .replaceAll("{4}", effectNames[4]));
+  const res = council.descriptions[sageIndex]
+  .replaceAll("{0}", effectNames[0])
+  .replaceAll("{1}", effectNames[1])
+  .replaceAll("{2}", effectNames[2])
+  .replaceAll("{3}", effectNames[3])
+  .replaceAll("{4}", effectNames[4]);
+
+  return highlight ? highlightHTML(res) : res;
 }
 
 function getCouncilDescription(state: GameState, sageIndex: number) {
