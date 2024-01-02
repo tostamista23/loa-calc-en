@@ -1,86 +1,56 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
 import Tesseract from 'tesseract.js';
 import { Box } from '../models/box.model';
 import { ScreenBox } from '../models/screen.model';
+import { CommonService } from './common.service';
+import { GetChaosCoord } from '../functions/sage';
+import { SageService } from './sage.service';
 
 @Injectable()
 export class DetectionService {
 
-    public game: ScreenBox = new ScreenBox();
+    constructor(private commonService: CommonService, private sageService: SageService) { }
 
-    constructor() {}
-
-    start(img: string) {
-        return Observable.create((observer: Observer<string>) => {
-
-            const scheduler = Tesseract.createScheduler();
-
-            const workerGen = async () => {
-                const worker = await Tesseract.createWorker('eng');
-                scheduler.addWorker(worker);
-            }
-
-            this.game.sages.forEach(x => {
-                this.cutImage(img, x).subscribe((data: any) =>  x.image = data);
-            });
-
-            const workerN = 4;
-            (async () => {
-                const resArr = Array(workerN);
-                for (let i=0; i<workerN; i++) {
-                    resArr[i] = workerGen();
-                }
-                await Promise.all(resArr);
-
-                const results = await Promise.all(this.game.sages.map((img: Box) => (
-                    scheduler.addJob('recognize', img.image).then((x: any) => {
-                        img.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ");
-                        console.log(img.text)
-                    })
-                )))
-
-                observer.next("");
-                observer.complete();
-                await scheduler.terminate(); // It also terminates all workers.
-            })();
-        })
+    async start(screen: ScreenBox, img: string): Promise<void> {
+        await this.sliceImages(screen, img);
+        await this.imageToText(screen, img);
+        await this.sageService.updateSageStacks(screen, img);
     }
 
-    cutImage(imageUrl: string, sizes: Box) {
+    async imageToText(screen: ScreenBox, img: string): Promise<void> {
 
-        return Observable.create((observer: Observer<string>) => {
-            const img = new Image();
-            img.src = imageUrl;
+        const scheduler = Tesseract.createScheduler();
 
-            img.onload = () => {
-                // Set up a canvas to manipulate the image
-                const canvas = document.createElement('canvas');
-                const ctx = canvas.getContext('2d');
+        // Creates worker and adds to scheduler
+        const workerGen = async () => {
+            const worker = await Tesseract.createWorker('eng');
+            scheduler.addWorker(worker);
+        }
 
-                // Set the canvas dimensions to the desired dimensions (e.g., 100x100)
-                canvas.width = img.width;
-                canvas.height = img.height;
-
-                // Draw the image on the canvas (this automatically scales to the canvas size)
-                ctx?.drawImage(img, 0,0);
-
-                // Crop the desired part of the image
-                const imageData = ctx?.getImageData(sizes.x, sizes.y, sizes.width, sizes.height);
-
-                // Create a new canvas for the cropped image
-                const croppedCanvas = document.createElement('canvas');
-                const croppedCtx = croppedCanvas.getContext('2d');
-
-                // Set the dimensions of the new canvas to the size of the crop
-                croppedCanvas.width = sizes.width;
-                croppedCanvas.height = sizes.height;
-
-                // Draw the cropped image on the new canvas
-                croppedCtx?.putImageData(imageData!, 0, 0);
-                observer.next(croppedCanvas.toDataURL());
-                observer.complete();
+        const workerN = 4;
+        await (async () => {
+            const resArr = Array(workerN);
+            for (let i=0; i<workerN; i++) {
+                resArr[i] = workerGen();
             }
+            await Promise.all(resArr);
+            /** Add 10 recognition jobs */
+            const results = await Promise.all(screen.sages.map((box: Box) => (
+                scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ")))
+            ))
+            await scheduler.terminate(); // It also terminates all workers.
+            await Promise.all(results); // <-- This is where we await everything.
+        })();
+    }
+
+    async sliceImages(screen: ScreenBox, img: string): Promise<void> {
+        const promises: Promise<void>[] = [];
+
+        screen.sages.forEach((box: Box, index: number) => {
+            //Sages
+            promises.push(this.commonService.cutImage(img, box));
         });
+
+        await Promise.all(promises);
     }
 }

@@ -11,9 +11,11 @@ import {
 } from 'src/app/core/elixir';
 import { DisclaimerDialogComponent } from '../../core/components/disclaimer-dialog.component';
 import { EvaluatorService } from '../services/evaluator.service';
-import { DetectionService } from '../services/detection.service';
-import { type } from 'os';
+import { SageService } from '../services/sage.service';
 import { Box } from '../models/box.model';
+import { MAX_CHAOS, MAX_LAWFUL } from 'src/app/core/elixir/data/const';
+import { ScreenBox } from '../models/screen.model';
+import { DetectionService } from '../services/detection.service';
 
 @Component({
   selector: 'app-elixir',
@@ -24,6 +26,9 @@ export class ElixirComponent implements OnInit {
   isLoading = false;
 
   gameState = api.game.getInitialGameState({ maxEnchant: 10, totalTurn: 14 });
+
+  //For detection
+  gameScreen: ScreenBox = new ScreenBox();
 
   focusedIndices: [number, number] = [0, 1];
 
@@ -41,7 +46,8 @@ export class ElixirComponent implements OnInit {
     private titleService: Title,
     private dialog: MatDialog,
     private evaluator: EvaluatorService,
-    private detectionService: DetectionService
+    public detection: DetectionService,
+    public sageService: SageService
   ) {
     this.titleService.setTitle(locale == "en-US" ? "Elixir Simulation - Lost Ark Optimization Calculator": 'LoaCalc : 엘릭서 시뮬레이션 - 로스트아크 최적화 계산기');
   }
@@ -133,8 +139,12 @@ export class ElixirComponent implements OnInit {
     this.totalScores = scores.totalScores;
   }
 
-  onFileSelected(event: any): void {
-      let list: {id: string,sage: number, desc: string}[] = []
+  async onFileSelected(event: any): Promise<void> {
+      this.loadDetection(event.target.files[0]);
+  }
+
+  loadDetection(file: any){
+    let list: {id: string,sage: number, desc: string}[] = []
       data.councils.forEach(obj => { 
         obj.descriptions.map(c => {
 
@@ -144,19 +154,25 @@ export class ElixirComponent implements OnInit {
         });
       });
 
-      this.detectionService.start(URL.createObjectURL(event.target.files[0])).subscribe(() => {
+    this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
 
-        this.detectionService.game.sages.forEach((box:Box, index: number) => {
-          let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
-        
-          if (!result){
-            console.warn(box.text.replace(/\s+$/, ''));
-            return;
-          }
-
+      this.gameScreen.sages.forEach((box:Box, index: number) => {
+        let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
+      
+        if (!result){
+          console.warn(box.text.replace(/\s+$/, ''));
+        }else{
           this.setCouncil(index, result.id);
-        });
-      })
+        }
+
+        this.setTypePower(index, 
+          { 
+            type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
+            power: box.children?.filter(x => x.text === 'lawful' || x.text === 'chaos').length || 0 
+          }
+        );
+      });
+    })
   }
 
   onFocusTarget(index: number) {

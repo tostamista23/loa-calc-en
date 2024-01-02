@@ -16,7 +16,9 @@ import { ElixirEffectComponent } from './components/elixir-effect.component';
 import { ElixirSageComponent } from './components/elixir-sage.component';
 import { ElixirComponent } from './containers/elixir.component';
 import { ElixirRoutingModule } from './elixir-routing.module';
+import { SageService } from './services/sage.service';
 import { DetectionService } from './services/detection.service';
+import { CommonService } from './services/common.service';
 
 
 @NgModule({
@@ -42,7 +44,7 @@ import { DetectionService } from './services/detection.service';
     MatInputModule,
     ReactiveFormsModule,
   ],
-  providers: [DetectionService],
+  providers: [SageService, DetectionService, CommonService],
 
 })
 export class ElixirModule {}

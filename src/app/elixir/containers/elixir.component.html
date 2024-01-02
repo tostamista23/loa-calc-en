@@ -66,6 +66,26 @@
           </mat-card-content>
         </mat-card>
       </div>
+      <div class="effect-list">
+        <mat-card
+          *ngFor="let sage of gameScreen.sages; index as i"
+        >
+          <mat-card-content style="display:flex">
+            <img [src]="sage.image">
+            <div *ngFor="let c of sage.children" class="">
+              <img [src]="c.image">
+            </div>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card
+          *ngFor="let effe of gameScreen.effects; index as i"
+        >
+          <mat-card-content>
+            <img [src]="effe.image">
+          </mat-card-content>
+        </mat-card>
+      </div>
     </div>
   </div>
 </div>

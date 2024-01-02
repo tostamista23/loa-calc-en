@@ -126,9 +126,6 @@ export function createEvaluator({
         sage.councilId
       );
       const convertedIndex = indexTable[convertedId];
-      console.log(sage.index, sage.councilId);
-      console.log(sage.index, convertedId);
-      console.log(sage.index, Council.query.getOne(convertedId));
 
       const a = adviceCounting[firstValue];
       const b = a[secondValue];
