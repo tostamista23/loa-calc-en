@@ -19,6 +19,7 @@ import { ElixirRoutingModule } from './elixir-routing.module';
 import { SageService } from './services/sage.service';
 import { DetectionService } from './services/detection.service';
 import { CommonService } from './services/common.service';
+import { EffectService } from './services/effect.service';
 
 
 @NgModule({
@@ -44,7 +45,7 @@ import { CommonService } from './services/common.service';
     MatInputModule,
     ReactiveFormsModule,
   ],
-  providers: [SageService, DetectionService, CommonService],
+  providers: [SageService, DetectionService, CommonService, EffectService],
 
 })
 export class ElixirModule {}

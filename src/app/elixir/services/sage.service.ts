@@ -39,11 +39,11 @@ export class SageService {
                         }
 
                         // Get the color of the middle pixel
-                        const middlePixelColor = this.getMiddlePixelColor(canvas);
+                        const middlePixelColor = this.commonService.getMiddlePixelColor(canvas);
                 
                         if (middlePixelColor) {
-                            x.text = this.getType([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
-                            console.log(x.text, index,indexOrb, x.image);
+                            x.text = this.getTypeSage([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
+                            //console.log(x.text, index,indexOrb, x.image);
                             if (x.text !== "not found"){
                                 box.children?.push(x);
                             }
@@ -68,7 +68,7 @@ export class SageService {
 
             if (index == -1){
                 alert("sage not found");
-                return;
+                resolve();
             }
 
             screen.sages[index].children = [];
@@ -91,10 +91,10 @@ export class SageService {
                     x.image = canvas.toDataURL("image/png");
 
                     // Get the color of the middle pixel
-                    const middlePixelColor = this.getMiddlePixelColor(canvas);
+                    const middlePixelColor = this.commonService.getMiddlePixelColor(canvas);
             
                     if (middlePixelColor) {
-                        x.text = this.getType([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
+                        x.text = this.getTypeSage([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
                         console.log(x.text, index,indexOrb, x.image);
                         screen.sages[index].children?.push(x);
                     }
@@ -110,7 +110,7 @@ export class SageService {
 
     }
 
-    public getType(pixel: [number, number, number], threshold: number = 30): string | null {
+    getTypeSage(pixel: [number, number, number], threshold: number = 30): string | null {
         const [red, green, blue] = pixel;
     
         // Define thresholds for purple, blue, and black
@@ -123,7 +123,7 @@ export class SageService {
 
         // Check if it's more likely to be purple, blue, black, or none of them based on color intensities
         const isPurple = red > purpleThreshold && blue > purpleThreshold && Math.abs(red - blue) < threshold && green < purpleThreshold;
-        const isBlue = (blue > blueThreshold && red < blueThreshold && green < blueThreshold) || this.isColorInRange([red, green, blue], specificBlue, threshold);
+        const isBlue = (blue > blueThreshold && red < blueThreshold && green < blueThreshold) || this.commonService.isColorInRange([red, green, blue], specificBlue, threshold);
         const isBlack = red < blackThreshold && green < blackThreshold && blue < blackThreshold;
     
         if (isPurple) {
@@ -136,31 +136,4 @@ export class SageService {
             return "not found";
         }
     }
-
-    public getMiddlePixelColor(canvas: HTMLCanvasElement): [number, number, number] | null {
-        const context = canvas.getContext('2d');
-
-        if (!context) {
-            return null;
-        }
-
-        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-        const middleX = Math.floor(canvas.width / 2);
-        const middleY = Math.floor(canvas.height / 2);
-        const index = (middleY * canvas.width + middleX) * 4;
-
-        const red = imageData.data[index];
-        const green = imageData.data[index + 1];
-        const blue = imageData.data[index + 2];
-
-        return [red, green, blue];
-    }
-
-    private isColorInRange(color: [number, number, number], targetColor: [number, number, number], threshold: number): boolean {
-        return (
-          Math.abs(color[0] - targetColor[0]) <= threshold &&
-          Math.abs(color[1] - targetColor[1]) <= threshold &&
-          Math.abs(color[2] - targetColor[2]) <= threshold
-        );
-      }
 }

@@ -1,5 +1,6 @@
 
 import { Box } from '../models/box.model';
+import { data, GameState } from 'src/app/core/elixir';
 
 export function  GetChaosCoord(width: number, index: number): Box[] {
     return [
@@ -22,4 +23,18 @@ export function GetLawfulCoord(width: number, index: number): Box[] {
 
 function GetWidthBySageIndex(width: number, index: number, value: number): number {
     return (index)*width + (index*13) + value
+}
+
+export function GetAllCouncils(gameState: GameState) {
+    let list: {id: string,sage: number, desc: string}[] = []
+
+    data.councils.forEach(obj => { 
+        obj.descriptions.map(c => {
+            [0,1,2].forEach(x => {
+                list.push({id:obj.id,sage: x, desc: GameState.query.getCouncilDescriptionFromId(gameState, obj.id, x, false).replaceAll("<", "").replaceAll(">","")});
+            })
+        });
+    });
+
+    return list;
 }

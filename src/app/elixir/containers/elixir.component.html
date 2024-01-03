@@ -29,6 +29,11 @@
           </button>
         </mat-card-content>
       </mat-card>
+      <mat-card *ngIf="gameScreen.attemptsLeft?.image">
+          <mat-card-content>
+            <img [src]="gameScreen.attemptsLeft.image">
+          </mat-card-content>
+        </mat-card>
     </div>
     <div class="layout">
       <mat-card *ngFor="let idx of [0, 1, 2]" class="sage">
@@ -81,8 +86,11 @@
         <mat-card
           *ngFor="let effe of gameScreen.effects; index as i"
         >
-          <mat-card-content>
+          <mat-card-content style="display:flex">
             <img [src]="effe.image">
+            <div *ngFor="let c of effe.children" class="">
+              <img [src]="c.image">
+            </div>
           </mat-card-content>
         </mat-card>
       </div>

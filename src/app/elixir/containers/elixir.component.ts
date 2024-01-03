@@ -16,6 +16,7 @@ import { Box } from '../models/box.model';
 import { MAX_CHAOS, MAX_LAWFUL } from 'src/app/core/elixir/data/const';
 import { ScreenBox } from '../models/screen.model';
 import { DetectionService } from '../services/detection.service';
+import { GetAllCouncils } from '../functions/sage';
 
 @Component({
   selector: 'app-elixir',
@@ -144,35 +145,60 @@ export class ElixirComponent implements OnInit {
   }
 
   loadDetection(file: any){
-    let list: {id: string,sage: number, desc: string}[] = []
-      data.councils.forEach(obj => { 
-        obj.descriptions.map(c => {
+      const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
+        
+      this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
+          this.updateSages();
+          this.updateEffects();
+          this.updateRemainingSteps();
+      })
+  }
 
-          [0,1,2].forEach(x => {
-            list.push({id:obj.id,sage: x, desc: GameState.query.getCouncilDescriptionFromId(this.gameState, obj.id, x, false).replaceAll("<", "").replaceAll(">","")});
-          })
-        });
+  updateSages(){
+    const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
+
+    this.gameScreen.sages.forEach((box:Box, index: number) => {
+
+      const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
+      let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
+    
+      !result ? console.warn(box.text.replace(/\s+$/, '')) : this.setCouncil(index, result.id)
+
+      this.setTypePower(index, { 
+          type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
+          power: box.children?.filter(x => x.text === 'lawful' || x.text === 'chaos').length || 0 
       });
+    });
+  }
 
-    this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
+  updateEffects(){
 
-      this.gameScreen.sages.forEach((box:Box, index: number) => {
-        let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
-      
-        if (!result){
-          console.warn(box.text.replace(/\s+$/, ''));
-        }else{
-          this.setCouncil(index, result.id);
-        }
+    this.gameScreen.effects.forEach((box:Box, index: number) => {
 
-        this.setTypePower(index, 
-          { 
-            type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
-            power: box.children?.filter(x => x.text === 'lawful' || x.text === 'chaos').length || 0 
-          }
-        );
-      });
-    })
+      let result = data.effectOptions.find((x) => x.name == box.text.replace(/\s+$/, ''));
+    
+      !result ? console.warn(box.text.replace(/\s+$/, '')) : this.gameState.effects[index].optionName = result.name
+
+      this.setEffectValue(index ,box.value)
+    });
+  }
+
+  updateRemainingSteps() {
+    let d = Number(this.gameScreen.attemptsLeft.text)
+
+    if (isNaN(d)){
+      alert("Remaining attemps invalid");
+      return;
+    }
+
+    const diff = this.gameState.turnLeft - d;
+    const incrementOrDecrement = diff < 0 ? this.increaseTurnLeft.bind(this) : this.decreaseTurnLeft.bind(this);
+
+    Array(Math.abs(diff)).fill(1).forEach((_, index) => {
+        setTimeout(() => {
+            incrementOrDecrement();
+        }, 200 * (index + 1));
+    });
   }
 
   onFocusTarget(index: number) {

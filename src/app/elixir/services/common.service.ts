@@ -46,4 +46,31 @@ export class CommonService {
             }
         });
     }
+
+    public getMiddlePixelColor(canvas: HTMLCanvasElement): [number, number, number] | null {
+        const context = canvas.getContext('2d');
+
+        if (!context) {
+            return null;
+        }
+
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const middleX = Math.floor(canvas.width / 2);
+        const middleY = Math.floor(canvas.height / 2);
+        const index = (middleY * canvas.width + middleX) * 4;
+
+        const red = imageData.data[index];
+        const green = imageData.data[index + 1];
+        const blue = imageData.data[index + 2];
+
+        return [red, green, blue];
+    }
+
+    public isColorInRange(color: [number, number, number], targetColor: [number, number, number], threshold: number): boolean {
+        return (
+          Math.abs(color[0] - targetColor[0]) <= threshold &&
+          Math.abs(color[1] - targetColor[1]) <= threshold &&
+          Math.abs(color[2] - targetColor[2]) <= threshold
+        );
+      }
 }
