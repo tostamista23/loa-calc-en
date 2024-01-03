@@ -10,7 +10,7 @@
             <input  #file type="file" (change)="onFileSelected($event)" accept="image/*" class="image-input" hidden>
           </div>
           <div class="turn-center font-size-16" i18n>
-            남은 연성 회
+            Remaining steps
           </div>
           <div class="turn-center">
             <button (click)="decreaseTurnLeft()" mat-icon-button>
@@ -21,19 +21,14 @@
               <mat-icon>add</mat-icon>
             </button>
           </div>
-          <button mat-flat-button color="primary" (click)="file.click()">
-            Image
-          </button>
-          <button mat-flat-button color="warn" (click)="onResetClick()" i18n>
-            초기화
-          </button>
         </mat-card-content>
       </mat-card>
-      <mat-card *ngIf="gameScreen.attemptsLeft?.image">
-          <mat-card-content>
-            <img [src]="gameScreen.attemptsLeft.image">
-          </mat-card-content>
-        </mat-card>
+      <div (paste)="onPaste($event)" (dblclick)="file.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)" contenteditable="true" class="image-container">
+        <p>Press (CTRL + V), Double Click or <br>drag and drop an image</p>
+      </div>
+      <div class="image-upload-container">
+        <input #file type="file" (change)="onFileSelected($event)" accept="image/*" class="image-input" hidden>
+      </div>
     </div>
     <div class="layout">
       <mat-card *ngFor="let idx of [0, 1, 2]" class="sage">
@@ -87,6 +82,7 @@
           *ngFor="let effe of gameScreen.effects; index as i"
         >
           <mat-card-content style="display:flex">
+            <img *ngIf="effe.child?.image" [src]="effe.child?.image">
             <img [src]="effe.image">
             <div *ngFor="let c of effe.children" class="">
               <img [src]="c.image">

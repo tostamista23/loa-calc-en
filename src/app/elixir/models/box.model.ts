@@ -10,6 +10,9 @@ export class Box {
     //Chaos/Lawful and level of effects
     children?: Box[];
 
+    //Seal or Exhaust
+    child!: Box;
+
     constructor(width: number, height: number, x:number, y:number, text?:any) {
         this.width = width;
         this.height = height;

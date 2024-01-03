@@ -1,6 +1,5 @@
-import { Component, OnInit, LOCALE_ID, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { Title } from '@angular/platform-browser';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import {
   api,
   Council,
@@ -17,6 +16,7 @@ import { MAX_CHAOS, MAX_LAWFUL } from 'src/app/core/elixir/data/const';
 import { ScreenBox } from '../models/screen.model';
 import { DetectionService } from '../services/detection.service';
 import { GetAllCouncils } from '../functions/sage';
+import { FloorDiv } from '@tensorflow/tfjs';
 
 @Component({
   selector: 'app-elixir',
@@ -41,17 +41,13 @@ export class ElixirComponent implements OnInit {
   councils = data.councils;
 
   isDangerous = false;
-
+  
   constructor(
-    @Inject(LOCALE_ID) public locale: string,
-    private titleService: Title,
     private dialog: MatDialog,
     private evaluator: EvaluatorService,
     public detection: DetectionService,
     public sageService: SageService
-  ) {
-    this.titleService.setTitle(locale == "en-US" ? "Elixir Simulation - Lost Ark Optimization Calculator": 'LoaCalc : 엘릭서 시뮬레이션 - 로스트아크 최적화 계산기');
-  }
+  ) { }
 
   ngOnInit(): void {
     this.dialog.open(DisclaimerDialogComponent, {
@@ -117,6 +113,96 @@ export class ElixirComponent implements OnInit {
     return false;
   }
 
+  @HostListener('paste', ['$event'])
+  onPaste(event: any): void {
+    // Check if the event has already been handled
+    if (this.isEventHandled(event)) {
+      return;
+    }
+
+    const item = (event.clipboardData || event.originalEvent.clipboardData).items[0];
+
+    if (item.type.indexOf('image') !== -1) {
+      this.reset();
+
+      const blob = item.getAsFile();
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.insertImage(e.target.result);
+      };
+
+      reader.readAsDataURL(blob);
+      this.loadDetection(blob);
+    }
+
+    this.markEventHandled(event);
+  }
+
+  
+  private isEventHandled(event: any): boolean {
+    const handledKey = '__handled__';
+    return event[handledKey] === true;
+  }
+
+  private markEventHandled(event: any): void {
+    const handledKey = '__handled__';
+    event[handledKey] = true;
+  }
+
+  onDragOver(event: any): void {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    const div = document.querySelector('.image-container');
+    div?.classList.add('drag-over');
+  }
+
+  onDrop(event: any): void {
+    this.reset();
+
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+
+    if (files.length > 0) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.insertImage(e.target.result);
+      };
+
+      reader.readAsDataURL(files[0]);
+      this.loadDetection(files[0]);
+    }
+
+    const div = document.querySelector('.image-container');
+    div?.classList.remove('drag-over');
+  }
+
+  insertImage(dataURL: string): void {
+    const img = document.createElement('img');
+    img.src = dataURL;
+
+    const div = document.querySelector('.image-container');
+    if (div){
+      div.innerHTML = '';
+      img.classList.add('inserted-image');
+      img.setAttribute("style", "height:100px")
+      div.appendChild(img);
+    }
+  }
+
+  removeImage(){
+    const img = document.querySelector('.inserted-image');
+    if (img) {
+      img.remove();
+    }
+
+    const div = document.querySelector('.image-container');
+    if (div){
+      div.innerHTML = '<p>Press (CTRL + V) or Click or <br>drag and drop an image here</p>';
+    }
+  }
+
   getCouncilDescription(id: string, index: number) {
     return GameState.query.getCouncilDescriptionFromId(
       this.gameState,
@@ -141,12 +227,19 @@ export class ElixirComponent implements OnInit {
   }
 
   async onFileSelected(event: any): Promise<void> {
+      this.reset();
+
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.insertImage(e.target.result);
+      };
+
+      reader.readAsDataURL(event.target.files[0]);
       this.loadDetection(event.target.files[0]);
   }
 
-  loadDetection(file: any){
-      const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
-        
+  loadDetection(file: any){        
       this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
           this.updateSages();
           this.updateEffects();
@@ -160,9 +253,9 @@ export class ElixirComponent implements OnInit {
     this.gameScreen.sages.forEach((box:Box, index: number) => {
 
       const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
-      let result = list.find((x) => x.desc == box.text.replace(/\s+$/, ''));
+      let result = list.find((x) => x.desc == box.text);
     
-      !result ? console.warn(box.text.replace(/\s+$/, '')) : this.setCouncil(index, result.id)
+      !result ? console.warn(box.text) : this.setCouncil(index, result.id)
 
       this.setTypePower(index, { 
           type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
@@ -175,18 +268,22 @@ export class ElixirComponent implements OnInit {
 
     this.gameScreen.effects.forEach((box:Box, index: number) => {
 
-      let result = data.effectOptions.find((x) => x.name == box.text.replace(/\s+$/, ''));
+      let result = data.effectOptions.find((x) => x.name == box.text);
     
-      !result ? console.warn(box.text.replace(/\s+$/, '')) : this.gameState.effects[index].optionName = result.name
+      !result ? console.warn(box.text) : this.gameState.effects[index].optionName = result.name
 
       this.setEffectValue(index ,box.value)
+
+      if (box.child.text && String(box.child.text).toLocaleLowerCase() == "seal"){
+        this.setEffectSealed(index, true)
+      }
     });
   }
 
   updateRemainingSteps() {
     let d = Number(this.gameScreen.attemptsLeft.text)
 
-    if (isNaN(d)){
+    if (isNaN(d) || d === 0){
       alert("Remaining attemps invalid");
       return;
     }
@@ -197,7 +294,7 @@ export class ElixirComponent implements OnInit {
     Array(Math.abs(diff)).fill(1).forEach((_, index) => {
         setTimeout(() => {
             incrementOrDecrement();
-        }, 200 * (index + 1));
+        }, 150 * (index + 1));
     });
   }
 
@@ -315,10 +412,9 @@ export class ElixirComponent implements OnInit {
     this.updateScores();
   }
 
-  onResetClick() {
-    const isConfirmed = window.confirm('정말 초기화하시겠습니까?');
-    if (!isConfirmed) return;
-
+  reset() {
     this.resetStates();
+    this.removeImage();
+    this.gameScreen = new ScreenBox();
   }
 }

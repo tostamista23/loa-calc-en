@@ -10,7 +10,7 @@ export function  GetEffectLevelCoord(width: number, index: number): Box[] {
         new Box(12, 12, 202, GetHeightByEffectIndex(width, index, 45)),
         new Box(12, 12, 232, GetHeightByEffectIndex(width, index, 45)),
         new Box(12, 12, 252, GetHeightByEffectIndex(width, index, 45)),
-        new Box(12, 12, 282, GetHeightByEffectIndex(width, index, 45)),
+        new Box(12, 12, 284, GetHeightByEffectIndex(width, index, 50)),//3
         new Box(12, 12, 308, GetHeightByEffectIndex(width, index, 45)),
         new Box(12, 12, 334, GetHeightByEffectIndex(width, index, 45)),
     ]

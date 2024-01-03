@@ -23,6 +23,14 @@ export class ScreenBox {
         ]
 
         this.attemptsLeft = new Box(30, 23, 508, 346)
+
+        this.addSealtoChild();
+    }
+
+    addSealtoChild(){
+        this.effects.forEach((x: any, index: number) => {
+            x.child = new Box(36, 20, 38, (index)*x.height + (index*76.5) + 45)
+        })
     }
 
 }

@@ -53,20 +53,24 @@ export class EffectService {
 
         await Promise.all(promises);
     }
-    
 
     getType(pixel: [number, number, number], threshold: number = 30): string | null {
         const [red, green, blue] = pixel;
     
         // Define thresholds for purple, blue, and black
         const yellowThreshold = 150;
-        
+        const redThreshold = 100;
+
         // Define the specific color
         const specific: [number, number, number] = [204, 201, 132];
+        const specificOrange: [number, number, number] = [223, 141, 41];
+        const specificRed: [number, number, number] = [255, 87, 44];
 
         const isYellowis = (blue > yellowThreshold && red < yellowThreshold && green < yellowThreshold) || this.commonService.isColorInRange([red, green, blue], specific, threshold);
-    
-        if (isYellowis) {
+        const isOrange = this.commonService.isColorInRange([red, green, blue], specificOrange, threshold);
+        const isRed = this.commonService.isColorInRange([red, green, blue], specificRed, redThreshold);
+
+        if (isYellowis || isOrange || isRed) {
             return 'on';
         }
 

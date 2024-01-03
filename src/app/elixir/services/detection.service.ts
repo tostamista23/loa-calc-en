@@ -40,20 +40,32 @@ export class DetectionService {
             //Sages
             await Promise.all(
                 screen.sages.map((box: Box) => (
-                    scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ")))
-                )
+                    scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ").replace(/\s+$/, ''))
+                ))
             )
             
             //Effects
             await Promise.all(
                 screen.effects.map((box: Box) => (
-                    scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ')))
-                )
+                    scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace(/\s+$/, ''))
+                ))
             )
             
+            //Effects - Seal
+            await Promise.all(
+                screen.effects.map((box: Box) => (
+                    scheduler.addJob('recognize', box.child.image).then((x: any) => box.child.text = x.data.text.replace(/[\r\n]/g, ' ').replace(/\s+$/, ''))
+                ))
+            )
+
             //Remaining Steps
             await Promise.all(
-                await scheduler.addJob('recognize', screen.attemptsLeft.image).then((x: any) => screen.attemptsLeft.text = x.data.text.replace(/[\r\n]/g, ' '))
+                await scheduler.addJob('recognize', screen.attemptsLeft.image).then((x: any) => screen.attemptsLeft.text = x.data.text.replace(/[\r\n]/g, ' ').replace(/\s+$/, ''))
+            )
+
+            //Seal
+            await Promise.all(
+                await scheduler.addJob('recognize', screen.attemptsLeft.image).then((x: any) => screen.attemptsLeft.text = x.data.text.replace(/[\r\n]/g, ' ').replace(/\s+$/, ''))
             )
 
             await scheduler.terminate();
@@ -72,6 +84,7 @@ export class DetectionService {
         //Effects
         screen.effects.forEach((box: Box, index: number) => {
             promises.push(this.commonService.cutImage(img, box));
+            promises.push(this.commonService.cutImage(img, box.child));
         });
 
         //Remaining Steps
