@@ -27,10 +27,19 @@
 }
 
 .is-focused {
-  box-shadow: 0 0 0 2px #000;
+  box-shadow: 0 0 0 1px #64748b;
 }
 
 .content-center {
   justify-content: center !important;
 }
 
+
+.p-12{
+  padding:12px
+}
+
+
+.mr-8 {
+  margin-right: 8px;
+}

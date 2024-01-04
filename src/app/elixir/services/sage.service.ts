@@ -64,7 +64,7 @@ export class SageService {
 
     UpdateSageLawfulOrbs(screen: ScreenBox, img: string) {
         return new Promise<void>(async (resolve, reject) => {
-            const index = screen.sages.findIndex(x => !x.children || x.children.length == 0);
+            const index = screen.sages.findIndex(x => !x.children || x.children.every(x => x.text == "empty" ||  x.text == "not found"));
 
             if (index == -1){
                 alert("sage not found");
@@ -120,9 +120,10 @@ export class SageService {
         
         // Define the specific blue color
         const specificBlue: [number, number, number] = [197, 247, 254]; // RGB value for #C5F7FE
+        const specificPurple: [number, number, number] = [255, 217, 255]; // RGB value for #C5F7FE
 
         // Check if it's more likely to be purple, blue, black, or none of them based on color intensities
-        const isPurple = red > purpleThreshold && blue > purpleThreshold && Math.abs(red - blue) < threshold && green < purpleThreshold;
+        const isPurple = this.commonService.isColorInRange([red, green, blue], specificPurple, purpleThreshold);
         const isBlue = (blue > blueThreshold && red < blueThreshold && green < blueThreshold) || this.commonService.isColorInRange([red, green, blue], specificBlue, threshold);
         const isBlack = red < blackThreshold && green < blackThreshold && blue < blackThreshold;
     

@@ -49,7 +49,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Attack Power",
+    name: "Atk. Power",
     optionDescriptions: [
       "Attack Power",
       "Attack Power +122",
@@ -71,7 +71,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Master of Escape",
+    name: "Escape Expert",
     optionDescriptions: [
       "Cooldown reduction of escape skills",
       "Cooldown reduction of escape skills +0.38%",
@@ -82,7 +82,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Master of Evasion",
+    name: "Evasion Expert",
     optionDescriptions: [
       "Cooldown reduction of movement skills",
       "Cooldown reduction of movement skills +0.38%",
@@ -93,7 +93,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Mana",
+    name: "MP",
     optionDescriptions: [
       "Maximum Mana",
       "Maximum Mana +15",
@@ -115,7 +115,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Blessing of Resources",
+    name: "Resource Blessing",
     optionDescriptions: [
       "Increased natural regeneration of combat resources",
       "Increased natural regeneration of combat resources +0.46%",
@@ -148,7 +148,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Potion Addiction",
+    name: "Potion Poisoning",
     optionDescriptions: [
       "Increased healing amount from recovery-type battle items",
       "Increased healing amount from recovery-type battle items +1.13%",
@@ -159,7 +159,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Master of Explosives",
+    name: "Explosives Expert",
     optionDescriptions: [
       "Increased damage from battle items",
       "Increased damage from battle items +1.6%",

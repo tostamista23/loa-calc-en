@@ -20,7 +20,7 @@
   </div>
   <div class="description-container" (click)="launchCouncilDialog(index)" [innerHTML]="description">
   </div>
-  <div>
+  <div *ngIf="gameState.turnLeft > 3">
     <div i18n>스택점수 {{ curveScore * 1000 | number : ".2-2" }}</div>
     <div i18n>
       조언점수

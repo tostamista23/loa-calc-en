@@ -241,21 +241,23 @@ export class ElixirComponent implements OnInit {
 
   loadDetection(file: any){        
       this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
-          this.updateSages();
           this.updateEffects();
+          this.updateSages();
           this.updateRemainingSteps();
       })
   }
 
   updateSages(){
     const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
-
     this.gameScreen.sages.forEach((box:Box, index: number) => {
 
-      const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
+      box.replacesSages();
       let result = list.find((x) => x.desc == box.text);
-    
-      !result ? console.warn(box.text) : this.setCouncil(index, result.id)
+
+      console.log(box.text)
+      console.log(list.filter((x) => x.id == "R3VkRa5o"))
+
+      !result ? alert(box.text + " not found") : this.setCouncil(index, result.id)
 
       this.setTypePower(index, { 
           type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
@@ -267,6 +269,8 @@ export class ElixirComponent implements OnInit {
   updateEffects(){
 
     this.gameScreen.effects.forEach((box:Box, index: number) => {
+
+      box.replacesEffect();
 
       let result = data.effectOptions.find((x) => x.name == box.text);
     
@@ -281,14 +285,18 @@ export class ElixirComponent implements OnInit {
   }
 
   updateRemainingSteps() {
-    let d = Number(this.gameScreen.attemptsLeft.text)
+    const regex = new RegExp(`^\\d{1,2}`);
 
-    if (isNaN(d) || d === 0){
+    this.gameScreen.replacesAttemptsLeft()
+    
+    const match = this.gameScreen.attemptsLeft.text.match(regex);
+
+    if ((match ? match[0] : null) === null){
       alert("Remaining attemps invalid");
       return;
     }
 
-    const diff = this.gameState.turnLeft - d;
+    const diff = this.gameState.turnLeft - (match.length == 1 ? match[0] : match[0] + match[1]);
     const incrementOrDecrement = diff < 0 ? this.increaseTurnLeft.bind(this) : this.decreaseTurnLeft.bind(this);
 
     Array(Math.abs(diff)).fill(1).forEach((_, index) => {

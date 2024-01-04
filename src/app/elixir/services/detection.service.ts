@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Tesseract from 'tesseract.js';
+import Tesseract, { PSM } from 'tesseract.js';
 import { Box } from '../models/box.model';
 import { ScreenBox } from '../models/screen.model';
 import { CommonService } from './common.service';
@@ -39,7 +39,7 @@ export class DetectionService {
 
             //Sages
             await Promise.all(
-                screen.sages.map((box: Box) => (
+                screen.sages.map(async (box: Box) => (
                     scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ").replace(/\s+$/, ''))
                 ))
             )
@@ -60,7 +60,9 @@ export class DetectionService {
 
             //Remaining Steps
             await Promise.all(
-                await scheduler.addJob('recognize', screen.attemptsLeft.image).then((x: any) => screen.attemptsLeft.text = x.data.text.replace(/[\r\n]/g, ' ').replace(/\s+$/, ''))
+                await scheduler.addJob('recognize', screen.attemptsLeft.image).then((x: any) => 
+                    screen.attemptsLeft.text = x.data.text
+                )
             )
 
             //Seal

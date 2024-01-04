@@ -36,7 +36,7 @@ export class EffectService {
                 
                         if (middlePixelColor) {
                             x.text = this.getType([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
-                            console.log(x.text, index,indexOrb, x.image);
+                            //console.log(x.text, index,indexOrb, x.image);
                             if (x.text !== "off"){
                                 box.value++
                             }
@@ -63,14 +63,16 @@ export class EffectService {
 
         // Define the specific color
         const specific: [number, number, number] = [204, 201, 132];
+        const specificDark: [number, number, number] = [118, 114, 68];
         const specificOrange: [number, number, number] = [223, 141, 41];
         const specificRed: [number, number, number] = [255, 87, 44];
 
         const isYellowis = (blue > yellowThreshold && red < yellowThreshold && green < yellowThreshold) || this.commonService.isColorInRange([red, green, blue], specific, threshold);
+        const isYellowSealed = (blue > yellowThreshold && red < yellowThreshold && green < yellowThreshold) || this.commonService.isColorInRange([red, green, blue], specificDark, threshold);
         const isOrange = this.commonService.isColorInRange([red, green, blue], specificOrange, threshold);
         const isRed = this.commonService.isColorInRange([red, green, blue], specificRed, redThreshold);
 
-        if (isYellowis || isOrange || isRed) {
+        if (isYellowis || isOrange || isRed || isYellowSealed) {
             return 'on';
         }
 

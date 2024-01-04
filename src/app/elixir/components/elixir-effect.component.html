@@ -1,50 +1,40 @@
-<div class="effect">
+<div>
   <div class="effect-info">
-    <mat-form-field>
-      <mat-select [(ngModel)]="gameState.effects[index].optionName">
-        <mat-option *ngFor="let option of effectOptions" [value]="option.name">
-          {{ option.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <div class="effect-value">
-      <div
-        class="effect-value-square"
-        *ngFor="let level of valueSquares; index as idx"
-        [ngClass]="{ 'is-filled': effect.value > idx }"
-        (click)="setValue.emit(idx + 1)"
-      >
-        <span>{{ level }}</span>
+    <div class="container">
+      <div class="div-cb-seal">
+        <mat-checkbox [ngModel]="gameState.effects[index].isSealed" (ngModelChange)="setSealed.emit($event)" class="self-center cb-seal"></mat-checkbox>
+        <br>
+        Seal
       </div>
-    </div>
-  </div>
-  <div>
-    <div>
-      <button
-        [disabled]="isFocused"
-        (click)="onFocusTarget($event)"
-        mat-flat-button
-        color="primary"
-      >
-        <span *ngIf="!isFocused" i18n>목표로 지정</span>
-        <span *ngIf="isFocused" i18n>지정된 목표</span>
+      <mat-form-field class="box mx-24">
+        <mat-select [(ngModel)]="gameState.effects[index].optionName">
+          <mat-option *ngFor="let option of effectOptions" [value]="option.name">
+            {{ option.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button (click)="onFocusTarget($event)" mat-flat-button class="box buttonEffect mr-8" [ngClass]="isFocused ? 'bg-green' : 'bg-blue'">
+        <span>{{isFocused ? 'Focused' : 'Focus'}}</span>
       </button>
     </div>
-    <div>
-      <button (click)="decrease.emit(index)" mat-icon-button>
+    <div class="effect-value">
+      <button class="mt--8" (click)="decrease.emit(index)" mat-icon-button>
         <mat-icon>remove</mat-icon>
       </button>
-      <button (click)="increase.emit(index)" mat-icon-button>
+      <div class="m-4 container">
+        <div class="effect-value-square box" *ngFor="let level of valueSquares; index as idx"
+          [ngClass]="{
+            'is-filled': effect.value > idx,
+            'orange-bg': effect.value > 8 && effect.value > idx,
+            'red-bg': effect.value === 10 && effect.value > idx
+          }"
+        >
+          <span>{{ level }}</span>
+        </div>
+      </div>
+      <button class="mt--8" (click)="increase.emit(index)" mat-icon-button>
         <mat-icon>add</mat-icon>
       </button>
     </div>
-  </div>
-  <div>
-    <mat-checkbox
-      [ngModel]="gameState.effects[index].isSealed"
-      (ngModelChange)="setSealed.emit($event)"
-      i18n
-      >봉인</mat-checkbox
-    >
   </div>
 </div>

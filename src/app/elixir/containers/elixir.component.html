@@ -46,7 +46,7 @@
         </mat-card-content>
       </mat-card>
       <div class="effect-list">
-        <mat-card
+        <mat-card class="p-12"
           *ngFor="let effect of gameState.effects; index as i"
           [class.is-focused]="focusedIndices.includes(i)"
         >
@@ -66,30 +66,7 @@
           </mat-card-content>
         </mat-card>
       </div>
-      <div class="effect-list">
-        <mat-card
-          *ngFor="let sage of gameScreen.sages; index as i"
-        >
-          <mat-card-content style="display:flex">
-            <img [src]="sage.image">
-            <div *ngFor="let c of sage.children" class="">
-              <img [src]="c.image">
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card
-          *ngFor="let effe of gameScreen.effects; index as i"
-        >
-          <mat-card-content style="display:flex">
-            <img *ngIf="effe.child?.image" [src]="effe.child?.image">
-            <img [src]="effe.image">
-            <div *ngFor="let c of effe.children" class="">
-              <img [src]="c.image">
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+      
     </div>
   </div>
 </div>

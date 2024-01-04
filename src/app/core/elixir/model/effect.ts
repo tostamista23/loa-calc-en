@@ -5,6 +5,7 @@ export interface Effect {
   optionName: keyof typeof effectOptionsRecord;
   value: number;
   isSealed: boolean;
+  isFocused: boolean;
 }
 
 export interface EffectOption {
@@ -14,9 +15,6 @@ export interface EffectOption {
 
 // reducers
 function setValue(effect: Effect, value: number): Effect {
-  if (effect.isSealed && effect.value !== value) {
-    throw new Error("Effect is sealed");
-  }
   if (value < 0) {
     throw new Error("Effect value must be positive");
   }
@@ -28,10 +26,6 @@ function setValue(effect: Effect, value: number): Effect {
 }
 
 function setOptionName(effect: Effect, optionName: string): Effect {
-  if (effect.isSealed) {
-    throw new Error("Effect is sealed");
-  }
-
   return {
     ...effect,
     optionName,
