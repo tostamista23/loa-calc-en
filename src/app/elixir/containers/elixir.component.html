@@ -1,72 +1,77 @@
 <div class="container">
   <div class="layout">
-    <h1 class="mat-h1" i18n>엘릭서 도우미 (베타)</h1>  <h2 i18n>합 8레벨 이상 목표.</h2>
+    <h1 class="mat-h1">Elixir Assistant (Beta)</h1>  <h2>- The goal is to reach level 8 or higher</h2>
   </div>
-  <div>
-    <div class="layout content-center">
-      <mat-card class="enchant-area">
-        <mat-card-content>
-          <div class="image-upload-container">
-            <input  #file type="file" (change)="onFileSelected($event)" accept="image/*" class="image-input" hidden>
-          </div>
-          <div class="turn-center font-size-16" i18n>
-            Remaining steps
-          </div>
-          <div class="turn-center">
-            <button (click)="decreaseTurnLeft()" mat-icon-button>
-              <mat-icon>remove</mat-icon>
-            </button>
-            <h1 class="m-0">{{ gameState.turnLeft }}</h1>
-            <button (click)="increaseTurnLeft()" mat-icon-button>
-              <mat-icon>add</mat-icon>
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
+  <div class="row">
+    <div>
+      <div class="layout content-center">
+        <mat-card class="enchant-area">
+          <mat-card-content>
+            <div class="image-upload-container">
+              <input  #file type="file" (change)="onFileSelected($event)" accept="image/*" class="image-input" hidden>
+            </div>
+            <div class="turn-center font-size-16" i18n>
+              Remaining steps
+            </div>
+            <div class="turn-center">
+              <button (click)="decreaseTurnLeft()" mat-icon-button>
+                <mat-icon>remove</mat-icon>
+              </button>
+              <h1 class="m-0">{{ gameState.turnLeft }}</h1>
+              <button (click)="increaseTurnLeft()" mat-icon-button>
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div class="layout">
+        <mat-card *ngFor="let idx of [0, 1, 2]" class="sage">
+          <mat-card-content>
+            <app-elixir-sage
+              [gameState]="gameState"
+              [curveScores]="curveScores"
+              [adviceScores]="adviceScores"
+              [totalScores]="totalScores"
+              [index]="idx"
+              (changeCouncil)="setCouncil(idx, $event)"
+              (changeTypePower)="setTypePower(idx, $event)"
+              (setExhausted)="setSageExhausted(idx, $event)"
+            ></app-elixir-sage>
+          </mat-card-content>
+        </mat-card>
+        <div class="effect-list">
+          <mat-card class="p-12"
+            *ngFor="let effect of gameState.effects; index as i"
+            [class.is-focused]="focusedIndices.includes(i)"
+          >
+            <mat-card-content>
+              <app-elixir-effect
+                [gameState]="gameState"
+                [pickRatios]="pickRatios"
+                [luckyRatios]="luckyRatios"
+                [index]="i"
+                [isFocused]="focusedIndices.includes(i)"
+                (focusTarget)="onFocusTarget($event)"
+                (increase)="increaseEffectValue($event)"
+                (decrease)="decreaseEffectValue($event)"
+                (setValue)="setEffectValue(i, $event)"
+                (setSealed)="setEffectSealed(i, $event)"
+              ></app-elixir-effect>
+            </mat-card-content>
+          </mat-card>
+        </div>
+        
+      </div>
+      
+    </div>
+    <div class="box file">
       <div (paste)="onPaste($event)" (dblclick)="file.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)" contenteditable="true" class="image-container">
         <p>Press (CTRL + V), Double Click or <br>drag and drop an image</p>
       </div>
       <div class="image-upload-container">
         <input #file type="file" (change)="onFileSelected($event)" accept="image/*" class="image-input" hidden>
       </div>
-    </div>
-    <div class="layout">
-      <mat-card *ngFor="let idx of [0, 1, 2]" class="sage">
-        <mat-card-content>
-          <app-elixir-sage
-            [gameState]="gameState"
-            [curveScores]="curveScores"
-            [adviceScores]="adviceScores"
-            [totalScores]="totalScores"
-            [index]="idx"
-            (changeCouncil)="setCouncil(idx, $event)"
-            (changeTypePower)="setTypePower(idx, $event)"
-            (setExhausted)="setSageExhausted(idx, $event)"
-          ></app-elixir-sage>
-        </mat-card-content>
-      </mat-card>
-      <div class="effect-list">
-        <mat-card class="p-12"
-          *ngFor="let effect of gameState.effects; index as i"
-          [class.is-focused]="focusedIndices.includes(i)"
-        >
-          <mat-card-content>
-            <app-elixir-effect
-              [gameState]="gameState"
-              [pickRatios]="pickRatios"
-              [luckyRatios]="luckyRatios"
-              [index]="i"
-              [isFocused]="focusedIndices.includes(i)"
-              (focusTarget)="onFocusTarget($event)"
-              (increase)="increaseEffectValue($event)"
-              (decrease)="decreaseEffectValue($event)"
-              (setValue)="setEffectValue(i, $event)"
-              (setSealed)="setEffectSealed(i, $event)"
-            ></app-elixir-effect>
-          </mat-card-content>
-        </mat-card>
-      </div>
-      
     </div>
   </div>
 </div>

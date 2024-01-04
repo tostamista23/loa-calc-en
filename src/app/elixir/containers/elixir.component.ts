@@ -186,7 +186,8 @@ export class ElixirComponent implements OnInit {
     if (div){
       div.innerHTML = '';
       img.classList.add('inserted-image');
-      img.setAttribute("style", "height:100px")
+      img.setAttribute("style", "height:" + (div.clientHeight - 100) + 'px')
+      img.setAttribute("style", "width:100%")
       div.appendChild(img);
     }
   }
@@ -227,16 +228,20 @@ export class ElixirComponent implements OnInit {
   }
 
   async onFileSelected(event: any): Promise<void> {
-      this.reset();
 
-      const reader = new FileReader();
+    if (event.target.files.length == 0)
+      return;
 
-      reader.onload = (e: any) => {
-        this.insertImage(e.target.result);
-      };
+    this.reset();
 
-      reader.readAsDataURL(event.target.files[0]);
-      this.loadDetection(event.target.files[0]);
+    const reader = new FileReader();
+
+    reader.onload = (e: any) => {
+      this.insertImage(e.target.result);
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+    this.loadDetection(event.target.files[0]);
   }
 
   loadDetection(file: any){        

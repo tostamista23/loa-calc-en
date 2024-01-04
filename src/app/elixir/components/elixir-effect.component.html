@@ -13,9 +13,11 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button (click)="onFocusTarget($event)" mat-flat-button class="box buttonEffect mr-8" [ngClass]="isFocused ? 'bg-green' : 'bg-blue'">
-        <span>{{isFocused ? 'Focused' : 'Focus'}}</span>
-      </button>
+      <div>
+        <button (click)="onFocusTarget($event)" mat-flat-button class="box buttonEffect mr-8 h-40" [ngClass]="isFocused ? 'bg-green' : 'bg-blue'">
+          <span>{{isFocused ? 'Focused' : 'Focus'}}</span>
+        </button>
+      </div>
     </div>
     <div class="effect-value">
       <button class="mt--8" (click)="decrease.emit(index)" mat-icon-button>
