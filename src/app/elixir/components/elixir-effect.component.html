@@ -24,10 +24,11 @@
         <mat-icon>remove</mat-icon>
       </button>
       <div class="m-4 container">
-        <div class="effect-value-square box" *ngFor="let level of valueSquares; index as idx"
+        <div class="effect-value-square box" *ngFor="let level of valueSquares; index as idx" (click)="setValue.emit(idx + 1)"
           [ngClass]="{
             'is-filled': effect.value > idx,
-            'orange-bg': effect.value > 8 && effect.value > idx,
+            'yellow-bg': effect.value > 5 && effect.value > idx,
+            'orange-bg': effect.value > 7 && effect.value > idx,
             'red-bg': effect.value === 10 && effect.value > idx
           }"
         >

@@ -80,6 +80,7 @@ export class Box {
             ["[will","I will"], //This time, [will transmute 2 effects
             ["transmate","transmute"], //This time, I will transmate 2 effects at the same time.
             ["transmaute","transmute"], //This time, I will transmaute 2 effects at the same time.
+            [" wil "," will "] //I wil 
           ];
           
         for (const [pattern, replacement] of toReplace) {
