@@ -13,7 +13,7 @@ export class EffectService {
         const promises: Promise<void>[] = [];
 
         screen.effects.forEach((box: Box, index:number) => {
-            const effectsPromises = GetEffectLevelCoord(box.height, index).map(async (x, indexOrb) => {
+            const effectsPromises = GetEffectLevelCoord(box.height, index, !screen.isForced ? -5 : 0).map(async (x, indexOrb) => {
                 return new Promise<void>(async (resolve) => {
                     await this.commonService.cutImage(img, x);
 

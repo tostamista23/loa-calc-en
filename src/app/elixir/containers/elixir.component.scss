@@ -19,7 +19,6 @@
 }
 
 .image-container {
-  margin-left:50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,4 +39,8 @@
 
 .image-container p {
   margin: 0; /* Remove default margin */
+}
+
+.mt--6{
+  margin-top: -6px;
 }

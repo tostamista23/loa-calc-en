@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable, Observer } from 'rxjs';
 import { Box } from '../models/box.model';
 import { ScreenBox } from '../models/screen.model';
 import { MAX_CHAOS, MAX_LAWFUL } from 'src/app/core/elixir/data/const';
@@ -62,52 +61,59 @@ export class SageService {
 
     }
 
-    UpdateSageLawfulOrbs(screen: ScreenBox, img: string) {
-        return new Promise<void>(async (resolve, reject) => {
-            const index = screen.sages.findIndex(x => !x.children || x.children.every(x => x.text == "empty" ||  x.text == "not found"));
+    async UpdateSageLawfulOrbs(screen: ScreenBox, img: string): Promise<void> {
+        const promises: Promise<void>[] = [];
 
-            if (index == -1){
-                alert("sage not found");
-                resolve();
+        //because exhausted can lead to missing sages
+        let sagesIndex: number[] = [];
+
+        screen.sages.forEach((sage:Box, index: number) =>{
+            if (!sage.children || sage.children.every(ef => ef.text == "empty" ||  ef.text == "not found") || sage.children.some(ef => ef.text == "lawful")) {
+                sagesIndex.push(index);
             }
+        })
 
+        //const sages = screen.sages.filter(x => !x.children || x.children.every(x => x.text == "empty" ||  x.text == "not found"));
+
+        sagesIndex.map((index: number) => {
             screen.sages[index].children = [];
 
-            await GetLawfulCoord(screen.sages[index].width, index).forEach(async (x, indexOrb) => {
-                await this.commonService.cutImage(img, x)
+            promises.push(...GetLawfulCoord(screen.sages[index].width, index, !screen.isForced ? -10 : 0).map(async (x, indexOrb) => {
 
-                const image = new Image();
-                image.src = x.image;
+                return new Promise<void>(async (resolve, reject) => {
+                    await this.commonService.cutImage(img, x)
+    
+                    const image = new Image();
+                    image.src = x.image;
+    
+                    image.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = x.width;
+                        canvas.height = x.height;
+    
+                        const context = canvas.getContext('2d');
+                        if (context){
+                            context.drawImage(image, 0, 0, x.width, x.height);
+                        }
+                        x.image = canvas.toDataURL("image/png");
+    
+                        // Get the color of the middle pixel
+                        const middlePixelColor = this.commonService.getMiddlePixelColor(canvas);
+                
+                        if (middlePixelColor) {
+                            x.text = this.getTypeSage([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
+                            console.log(x.text, index, indexOrb, x.image);
+                            screen.sages[index].children?.push(x);
+                        }
 
-                image.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = x.width;
-                    canvas.height = x.height;
-
-                    const context = canvas.getContext('2d');
-                    if (context){
-                        context.drawImage(image, 0, 0, x.width, x.height);
-                    }
-                    x.image = canvas.toDataURL("image/png");
-
-                    // Get the color of the middle pixel
-                    const middlePixelColor = this.commonService.getMiddlePixelColor(canvas);
-            
-                    if (middlePixelColor) {
-                        x.text = this.getTypeSage([middlePixelColor[0],middlePixelColor[1],middlePixelColor[2]]);
-                        console.log(x.text, index,indexOrb, x.image);
-                        screen.sages[index].children?.push(x);
-                    }
-
-                    //Last
-                    if (screen.sages[index].children?.length == MAX_LAWFUL){
                         resolve();
-                    }
+                    };
+                });
 
-                };
-            })
-        });
+            }))
+        })
 
+        await Promise.all(promises);
     }
 
     getTypeSage(pixel: [number, number, number], threshold: number = 30): string | null {

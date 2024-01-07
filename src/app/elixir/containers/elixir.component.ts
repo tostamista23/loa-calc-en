@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   api,
   Council,
+  CouncilType,
   data,
   GameState,
   Sage,
@@ -16,7 +17,8 @@ import { MAX_CHAOS, MAX_LAWFUL } from 'src/app/core/elixir/data/const';
 import { ScreenBox } from '../models/screen.model';
 import { DetectionService } from '../services/detection.service';
 import { GetAllCouncils } from '../functions/sage';
-import { FloorDiv } from '@tensorflow/tfjs';
+import { updateImage } from '../functions/resolution';
+import { AnomalyDialogComponent } from '../components/anomaly-dialog.component';
 
 @Component({
   selector: 'app-elixir',
@@ -25,7 +27,7 @@ import { FloorDiv } from '@tensorflow/tfjs';
 })
 export class ElixirComponent implements OnInit {
   isLoading = false;
-
+  isDev: boolean = true;
   gameState = api.game.getInitialGameState({ maxEnchant: 10, totalTurn: 14 });
 
   //For detection
@@ -129,6 +131,7 @@ export class ElixirComponent implements OnInit {
       const reader = new FileReader();
 
       reader.onload = (e: any) => {
+        
         this.insertImage(e.target.result);
       };
 
@@ -244,30 +247,50 @@ export class ElixirComponent implements OnInit {
     this.loadDetection(event.target.files[0]);
   }
 
-  loadDetection(file: any){        
-      this.detection.start(this.gameScreen, URL.createObjectURL(file)).then(() => {
-          this.updateEffects();
-          this.updateSages();
-          this.updateRemainingSteps();
+  loadDetection(file: any){      
+
+    if (!this.gameScreen.isForced){
+      this.gameScreen.updateToAspectRatio()
+    }
+
+    updateImage(URL.createObjectURL(file), this.gameScreen.isForced).then((x: {success: boolean, file?: string}) => {
+      if (!x.success || !x.file){
+        alert("Image dimensions not supported")
+        return;
+      }
+
+      this.detection.start(this.gameScreen, x?.file).then(() => {
+        this.updateEffects();
+        this.updateSages();
+        this.updateRemainingSteps();
       })
+
+    })
+
   }
 
   updateSages(){
-    const list: {id: string,sage: number, desc: string}[] = GetAllCouncils(this.gameState);
+    const list: {id: string,sage: number, desc: string, canExhaust: boolean}[] = GetAllCouncils(this.gameState);
     this.gameScreen.sages.forEach((box:Box, index: number) => {
 
-      box.replacesSages();
-      let result = list.find((x) => x.desc == box.text);
-
-      console.log(box.text)
-      console.log(list.filter((x) => x.id == "R3VkRa5o"))
-
-      !result ? alert(box.text + " not found") : this.setCouncil(index, result.id)
-
       this.setTypePower(index, { 
-          type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
-          power: box.children?.filter(x => x.text === 'lawful' || x.text === 'chaos').length || 0 
-      });
+        type: box.children?.length === MAX_LAWFUL ? 'lawful' : box.children?.length === MAX_CHAOS ? 'chaos' : 'none', 
+        power: box.children?.filter(x => x.text === 'lawful' || x.text === 'chaos').length || 0 
+    });
+
+      box.replacesSages();
+      let result = list.filter((x) => x.desc.length > 8 && x.desc.toLocaleLowerCase().includes(box.text?.toLocaleLowerCase()));
+
+      if (result.length === 0){
+        console.log(box.text);
+        console.log(list.filter(x => x.id == "6WfZZIUE"));
+        alert(box.text + " not found")
+        return
+      }else if (box.text && result.length !== 1 && result.length <= 10) {
+        this.AnomalyDialog(index, result)
+      }
+
+      this.updateCouncil(index, result[0].id, result[0].canExhaust);
     });
   }
 
@@ -277,7 +300,7 @@ export class ElixirComponent implements OnInit {
 
       box.replacesEffect();
 
-      let result = data.effectOptions.find((x) => x.name == box.text);
+      let result = data.effectOptions.find((x) => x.name.toLocaleLowerCase() == box.text.toLocaleLowerCase());
     
       !result ? console.warn(box.text) : this.gameState.effects[index].optionName = result.name
 
@@ -299,6 +322,11 @@ export class ElixirComponent implements OnInit {
     if ((match ? match[0] : null) === null){
       alert("Remaining attemps invalid");
       return;
+    }
+
+    //sometimes t is converted to 1 -> Ex. 61
+    if (match > 13 && match[0].length == 2 && match[0].charAt(1) == 1){
+      match[0] = match[0].charAt(0)
     }
 
     const diff = this.gameState.turnLeft - (match.length == 1 ? match[0] : match[0] + match[1]);
@@ -425,9 +453,28 @@ export class ElixirComponent implements OnInit {
     this.updateScores();
   }
 
+  AnomalyDialog(index: number, list: any[]) {
+    const dialogRef = this.dialog.open(AnomalyDialogComponent, {
+      disableClose: true,
+      data: { gameState: this.gameState, list: list },
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result == null) return;
+      this.updateCouncil(index, result.id, result.canExhaust)
+    });
+  }
+
+  updateCouncil(index: number, id: string, canExhaust?: boolean) {
+    this.setCouncil(index, id)
+    this.gameState.sages[index].isExhausted = canExhaust || false
+  }
+
   reset() {
     this.resetStates();
     this.removeImage();
+    const isF = this.gameScreen.isForced;
     this.gameScreen = new ScreenBox();
+    this.gameScreen.isForced = isF
   }
 }

@@ -192,7 +192,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Expert (Order)",
+    name: "Master (Order)",
     optionDescriptions: [
       "Attack Power",
       "Attack Power +0.23%",
@@ -214,7 +214,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Blade Shield (Order)",
+    name: "Bladed Shield (Order)",
     optionDescriptions: [
       "Attack Power",
       "Attack Power +0.23%",
@@ -345,7 +345,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Physical Defense",
+    name: "Phy. Defense",
     optionDescriptions: [
       "Physical Defense",
       "Physical Defense +960",
@@ -367,14 +367,14 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Critical Damage",
+    name: "Crit Damage",
     optionDescriptions: [
-      "Critical Damage",
-      "Critical Damage +1.12%",
-      "Critical Damage +2.31%",
-      "Critical Damage +3.5%",
-      "Critical Damage +5.25%",
-      "Critical Damage +7%",
+      "Crit Damage",
+      "Crit Damage +1.12%",
+      "Crit Damage +2.31%",
+      "Crit Damage +3.5%",
+      "Crit Damage +5.25%",
+      "Crit Damage +7%",
     ],
   },
   {
@@ -433,7 +433,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Expert (Chaos)",
+    name: "Master (Chaos)",
     optionDescriptions: [
       "Damage to enemies",
       "Damage to enemies +0.23%",
@@ -455,7 +455,7 @@ export const effectOptions: readonly EffectOption[] = [
     ],
   },
   {
-    name: "Blade Shield (Chaos)",
+    name: "Bladed Shield (Chaos)",
     optionDescriptions: [
       "Damage to enemies",
       "Damage to enemies +0.23%",

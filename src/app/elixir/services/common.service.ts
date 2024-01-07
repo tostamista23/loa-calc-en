@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Box } from '../models/box.model';
+const imageGrayscale = require('image-filter-grayscale');
 
 @Injectable()
 export class CommonService {
@@ -72,5 +73,91 @@ export class CommonService {
           Math.abs(color[1] - targetColor[1]) <= threshold &&
           Math.abs(color[2] - targetColor[2]) <= threshold
         );
-      }
+    }
+
+    applyContrast(base64Image: string, contrast: number): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const image = new Image();
+            image.src = base64Image;
+    
+            image.onload = () => {
+
+                if (context){
+                    context.drawImage(image, 0, 0, context.canvas.width, context.canvas.height);
+    
+                    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+                    const data = imageData.data;
+                    
+                    // Apply contrast
+                    contrast = (contrast / 100) + 1;
+        
+                    for (let i = 0; i < data.length; i += 4) {
+                        // Aplicando o contraste a cada canal de cor (R, G, B)
+                        data[i] = ((data[i] / 255 - 0.5) * contrast + 0.5) * 255;
+                        data[i + 1] = ((data[i + 1] / 255 - 0.5) * contrast + 0.5) * 255;
+                        data[i + 2] = ((data[i + 2] / 255 - 0.5) * contrast + 0.5) * 255;
+                    }
+
+                    // Remove purple tones (adjust the tolerance level as needed)
+                    const purpleTolerance = 50;
+                    for (let i = 0; i < data.length; i += 4) {
+                        const red = data[i];
+                        const blue = data[i + 2];
+
+                        if (blue - red > purpleTolerance) {
+                            // If blue is significantly greater than red, set to white
+                            data[i] = 0; // Red
+                            data[i + 1] = 0; // Green
+                            data[i + 2] = 0; // Blue
+                        }
+                    }
+        
+                    context.putImageData(imageData, 0, 0);
+        
+                    // Obtendo a imagem ajustada como uma string base64
+                    //const adjustedBase64 = canvas.toDataURL('image/jpeg');
+                }
+                
+                resolve(canvas.toDataURL('image/jpeg'));
+            };
+    
+            image.onerror = () => {
+                reject('Erro ao carregar a imagem.');
+            };
+        });
+    }
+
+
+    applyGrayscale(base64Image: string): Promise<string> {
+        return new Promise<string>((resolve, reject) => {
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            const image = new Image();
+            image.src = base64Image;
+    
+            image.onload = () => {
+
+                if (context){
+                    context.drawImage(image, 0, 0, context.canvas.width, context.canvas.height);
+    
+                    const imageData = context.getImageData(0, 0, context.canvas.width, context.canvas.height);
+        
+                    imageGrayscale(imageData, 4).then((x: ImageData) => {
+                        context.putImageData(x, 0, 0);
+                        resolve(canvas.toDataURL('image/jpeg'))
+                    });
+                }
+            };
+    
+            image.onerror = () => {
+                reject('Erro ao carregar a imagem.');
+            };
+        });
+    }
 }

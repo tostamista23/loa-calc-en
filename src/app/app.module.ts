@@ -12,7 +12,6 @@ import { AdsenseModule } from 'ng2-adsense';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
-import { DonateModule } from './donate/donate.module';
 import { HomeModule } from './home/home.module';
 import { ElixirModule } from './elixir/elixir.module';
 
@@ -23,7 +22,6 @@ import { ElixirModule } from './elixir/elixir.module';
     BrowserAnimationsModule,
     CoreModule,
     HomeModule,
-    DonateModule,
     MatToolbarModule,
     MatButtonModule,
     MatDialogModule,

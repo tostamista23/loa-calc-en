@@ -2,12 +2,14 @@ import { Box } from "./box.model";
 
 export class ScreenBox {
     aspectRatio: string;
+    isForced: boolean;
     sages: Box[];
     effects: Box[];
     attemptsLeft: Box;
 
     constructor() {
-        this.aspectRatio = "21:9bb";
+        this.aspectRatio = "16:9";
+        this.isForced = true;
         this.sages = [
             new Box(238, 73, 575, 640), 
             new Box(238, 73, 835, 640), 
@@ -43,6 +45,12 @@ export class ScreenBox {
         if (this.attemptsLeft.text.startsWith('I')){
             this.attemptsLeft.text = this.attemptsLeft.text.replace("I", "1")
         }
+    }
+
+    updateToAspectRatio(){
+        this.sages[0].x +=5
+        this.effects.forEach(x => x.x -= 9)
+        this.attemptsLeft = new Box(22, 25, 988, 850)
     }
 
 }

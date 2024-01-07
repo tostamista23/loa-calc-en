@@ -1,7 +1,10 @@
-<div class="penguin mb-12">
-  <img src="assets/sage{{index+1}}.jpg" />
-</div>
+<mat-checkbox class="cb-center mb-12"
+  [ngModel]="sage.isExhausted"
+  (ngModelChange)="setExhausted.emit($event)"
+  >Exhaust</mat-checkbox
+>
 <ng-container *ngIf="!sage.isExhausted">
+  
   <div class="power-container">
     <div
       *ngFor="let i of [1, 2, 3]"
@@ -18,26 +21,18 @@
       (click)="setTypePower('chaos', i)"
     ></div>
   </div>
-  <div class="description-container" (click)="launchCouncilDialog(index)" [innerHTML]="description">
+  <div class="description-container align-center" (click)="launchCouncilDialog(index)" [innerHTML]="description">
   </div>
-  <div *ngIf="gameState.turnLeft > 3">
-    <div i18n>스택점수 {{ curveScore * 1000 | number : ".2-2" }}</div>
-    <div i18n>
-      조언점수
-      {{ adviceScore * 10000 | number : ".2-2" }}
+  <div>
+    <div>Stack Score: {{ curveScore * 1000 | number : ".2-2" }}</div>
+    <div>
+      Advice Score {{ adviceScore * 10000 | number : ".2-2" }}
     </div>
-    <div [class.is-highest]="isHighest" i18n>
-      최종점수
-      {{ totalScore * 1000 | number : ".2-2" }}
+    <div [class.is-highest]="isHighest">
+      Final Score: {{ totalScore * 1000 | number : ".2-2" }}
     </div>
   </div>
   <ng-container *ngIf="sage.isExhausted">
     <div>{{ description }}</div>
   </ng-container>
 </ng-container>
-
-<mat-checkbox
-  [ngModel]="sage.isExhausted"
-  (ngModelChange)="setExhausted.emit($event)"
-  i18n>소진</mat-checkbox
->

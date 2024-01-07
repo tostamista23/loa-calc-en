@@ -34,7 +34,7 @@ export function createGameService(
     const sage = state.sages[ui.selectedSageIndex];
     const council = Council.query.getOne(sage.councilId);
     if (council.type === "exhausted") {
-      throw new Error("Cannot select exhausted council");
+      //throw new Error("Cannot select exhausted council");
     }
 
     const logics = council.logics;

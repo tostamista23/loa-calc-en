@@ -20,6 +20,7 @@ import { SageService } from './services/sage.service';
 import { DetectionService } from './services/detection.service';
 import { CommonService } from './services/common.service';
 import { EffectService } from './services/effect.service';
+import { AnomalyDialogComponent } from './components/anomaly-dialog.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { EffectService } from './services/effect.service';
     ElixirSageComponent,
     CouncilDialogComponent,
     EffectDialogComponent,
+    AnomalyDialogComponent,
   ],
   imports: [
     CommonModule,

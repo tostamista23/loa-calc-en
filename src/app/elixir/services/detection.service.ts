@@ -8,15 +8,36 @@ import { EffectService } from './effect.service';
 
 @Injectable()
 export class DetectionService {
+    //loading: {isLoading: boolean, value: number, text: string} = "";
 
     constructor(private commonService: CommonService, private sageService: SageService, private effectService: EffectService) { }
 
     async start(screen: ScreenBox, img: string): Promise<void> {
+        //loading.isLoading = true;
         await this.sliceImages(screen, img);
+        await this.applyContrastToImages(screen);
         await this.imageToText(screen, img);
         await this.sageService.updateSageStacks(screen, img);
         await this.effectService.updateLevelEffects(screen, img);
+        //loading.isLoading = false;
     }
+
+    //Text to image sucks, if text is empty, darkers the image and trys to read again
+    async applyContrastToImages(screen: ScreenBox): Promise<void> {
+
+        const promises: Promise<void>[] = screen.sages.map((sage: Box) => {
+            return new Promise<void>(async (resolve, reject) => {
+                
+                this.commonService.applyContrast(sage.image, 100).then(async x => {
+                    sage.image = x
+                    resolve();
+                })
+            })
+        })
+
+        await Promise.all(promises);
+    }
+
 
     async imageToText(screen: ScreenBox, img: string): Promise<void> {
 
@@ -40,7 +61,8 @@ export class DetectionService {
             //Sages
             await Promise.all(
                 screen.sages.map(async (box: Box) => (
-                    scheduler.addJob('recognize', box.image).then((x: any) => box.text = x.data.text.replace(/[\r\n]/g, ' ').replace("forall","for all").replace("7"," to ").replace(/\s+$/, ''))
+                    //this.loading = "Reading "
+                    scheduler.addJob('recognize', box.image).then((x: any) => {console.log(x.data.text); box.text = x.data.text})
                 ))
             )
             

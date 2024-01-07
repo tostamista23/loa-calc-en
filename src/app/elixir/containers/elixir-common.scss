@@ -15,7 +15,6 @@
 
 .effect-list {
   flex: 1 0 auto;
-
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -33,9 +32,24 @@
   justify-content: center !important;
 }
 
+.mb-12{
+  margin-bottom:12px
+}
 
 .p-12{
   padding:12px
+}
+
+.p-24{
+  padding:24px
+}
+
+.ml-24{
+  margin-left:24px;
+}
+
+.align-center {
+  text-align: center;
 }
 
 
@@ -51,7 +65,31 @@
   flex: 1;
 }
 
+.h-100{
+  height: 100%;
+}
+
+.w-100{
+  width: 100%;
+}
+
 
 .image-container{
   height: 95%;
+}
+
+.flex{
+  flex: 1;
+  box-sizing: border-box;
+  padding: 10px; /* Optional: Add padding or other styles as needed */
+  border: 1px solid #ccc;
+}
+
+.pr-0{
+  padding-right: 0px;
+}
+
+
+.pt-0{
+  padding-top:0px
 }
